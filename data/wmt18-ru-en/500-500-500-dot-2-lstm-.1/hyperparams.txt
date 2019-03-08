@@ -1,0 +1,68 @@
+#####################################################################
+# (0) General settings (to be modified for each project)            #
+#####################################################################
+
+### User-specified directories ###
+workdir=/home/hltcoe/kduh/p/mt/wmt18/ru-en/sockeye/50000-50000
+datadir=/home/hltcoe/kduh/p/mt/wmt18/ru-en/sockeye/data-bpe
+modeldir=$workdir/500-500-500-dot-2-lstm-.1
+rootdir=/home/hltcoe/kduh/src/mt/sockeye-recipes/
+
+### Language pair (source and target) ###
+# Note: We assume all bitext files contain these as suffices. 
+# e.g. $train_tok.$src, $train_tok.$trg refer to the source and target 
+src=ru
+trg=en
+
+
+#####################################################################
+# (1) preprocess-bpe.sh settings (modify if needed)                 #
+#####################################################################
+
+### Number of symbols to use for BPE ###
+# Note: we perform source and target BPE separately
+# This corresponds to initial source (src) and target (trg) vocab size
+bpe_symbols_src=50000
+bpe_symbols_trg=50000
+
+### Filename for BPE-processed bitext file ###
+# Note: the following default names should be fine for most use cases
+train_bpe_src=$datadir/train.bpe-${bpe_symbols_src}.$src
+valid_bpe_src=$datadir/valid.bpe-${bpe_symbols_src}.$src
+train_bpe_trg=$datadir/train.bpe-${bpe_symbols_trg}.$trg
+valid_bpe_trg=$datadir/valid.bpe-${bpe_symbols_trg}.$trg
+
+### Filename for BPE vocabulary ###
+# Note: the following default names should be fine for most use cases
+# Note: bpe_vocab_src will be needed for applying BPE to test, in translate.sh
+bpe_vocab_src=${train_bpe_src}.bpe_vocab
+bpe_vocab_trg=${train_bpe_trg}.bpe_vocab
+
+
+#####################################################################
+# (2) train.sh settings (modify if needed)                          #
+#####################################################################
+
+# Model architecture
+num_embed="500:500"
+rnn_num_hidden=500
+rnn_attention_type="dot"
+num_layers=2
+rnn_cell_type="lstm"
+
+# Training configuration
+max_seq_len="100:100"
+num_words="${bpe_symbols_src}:${bpe_symbols_trg}"
+word_min_count="1:1"
+batch_size=128
+embed_dropout=".1:.1"
+rnn_dropout_inputs=".0:.0"
+rnn_dropout_states=".0:.0"
+
+# Logging and stopping condition
+checkpoint_frequency=10000
+min_num_epochs=0
+max_num_epochs=30
+max_updates=10000000
+keep_last_params=5
+decode_and_evaluate=-1

@@ -152,7 +152,8 @@ regret=0.002808 resource=818 num_arms_examined=46
 
 We see regret is between 0-0.004 BLEU difference, which is miniscule. The number of arms examined by Hyperband is 46. If we were to train 46 models each up to `-i 30` iterations, that would take 46x30=1380 resources. In this case, Hyperband only used 818 resources (training iterations) in total, a 40% saving. 
 
-<hr>
+---
+
 ### Acknowledgments
 
 This work is supported by an Amazon Research Award. Thanks! 
